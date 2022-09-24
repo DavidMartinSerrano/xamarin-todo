@@ -1,9 +1,11 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ToDoList.Models;
+using ToDoList.Services;
 using Xamarin.Forms;
 
 namespace ToDoList.ViewModels
@@ -12,7 +14,6 @@ namespace ToDoList.ViewModels
     {
         #region Properties
         public ICommand SaveItemCommand { get; set; }
-        public ICommand DeleteItemCommand { get; set; }
         public ICommand GoBackCommand { get; set; }   
 
         public string PageTitle
@@ -20,6 +21,7 @@ namespace ToDoList.ViewModels
             get { return _pageTitle; }
             set { SetProperty(ref _pageTitle, value); }
         }
+              
 
         public string Name
         {
@@ -36,14 +38,12 @@ namespace ToDoList.ViewModels
         #endregion
 
         #region Constructor        
-        public ToDoItemPageViewModel(INavigationService navigationService)
+        public ToDoItemPageViewModel(INavigationService navigationService, ITodoService todoService)
         {
-            //Inject services
-            _navigationService = navigationService;       
-
+            _navigationService = navigationService;
+            _todoService = todoService;
 
             SaveItemCommand = new DelegateCommand(OnSaveItem);
-            DeleteItemCommand = new DelegateCommand(OnDeleteItem);
             GoBackCommand = new DelegateCommand(OnGoBack);           
         }
         #endregion
@@ -56,28 +56,17 @@ namespace ToDoList.ViewModels
                 Name = _name,
                 IsComplete = _isComplete
             };
-
-            //if (AppSettings.VoiceLanguage == Enums.Language.English)
-            //    _itemAnnouncementService.SayItemSavedInEnglish();
-
-            //else if (AppSettings.VoiceLanguage == Enums.Language.Ukrainian)
-            //    _itemAnnouncementService.SayItemSavedInUkrainian();
-                        
-            //await _toDoItemsRepository.SaveItemAsync(toDoItem);
-            
-            await _navigationService.GoBackAsync();
-        }
-
-        private async void OnDeleteItem()
-        {
-            var toDoItem = new ToDoItem()
+      
+            if(PageTitle.Equals("Edit item"))
             {
-                Name = _name,
-                IsComplete = _isComplete
-            };
-       
-           // await _toDoItemsRepository.DeleteItemAsync(toDoItem);
-            
+                await _todoService.UpdateTodoItemAsync(_itemIndex, toDoItem);
+            }
+            else
+            {
+                await _todoService.AddTodoItemAsync(toDoItem);
+
+            }
+
             await _navigationService.GoBackAsync();
         }
 
@@ -86,7 +75,7 @@ namespace ToDoList.ViewModels
             await _navigationService.GoBackAsync();
         }             
 
-        public void OnNavigatingTo(NavigationParameters parameters)
+        public void OnNavigatingTo(INavigationParameters parameters)
         {
             if (parameters.ContainsKey("ToDoItem"))
             {
@@ -99,25 +88,27 @@ namespace ToDoList.ViewModels
             {
                 PageTitle = (string)parameters["PageTitle"];
             }
+            if (parameters.ContainsKey("ItemIndex"))
+            {
+                _itemIndex = Convert.ToInt32((string)parameters["ItemIndex"]);
+            }
         }
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
-            throw new System.NotImplementedException();
         }
         #endregion
 
         #region Fields        
         private readonly INavigationService _navigationService;
+        private readonly ITodoService _todoService;
         private string _pageTitle;
-        private int _itemId = 0;
+        private int _itemIndex = 0;
         private string _name;
-        private string _notes;
         private bool _isComplete;
         #endregion
     }

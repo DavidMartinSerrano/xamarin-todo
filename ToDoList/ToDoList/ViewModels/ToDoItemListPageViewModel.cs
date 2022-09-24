@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using ToDoList.Models;
+using ToDoList.Services;
 using Xamarin.Forms;
 
 namespace ToDoList.ViewModels
@@ -50,9 +51,10 @@ namespace ToDoList.ViewModels
         #endregion
 
         #region Constructor        
-        public ToDoItemListPageViewModel(INavigationService navigationService)
+        public ToDoItemListPageViewModel(INavigationService navigationService, ITodoService todoService)
         {
             _navigationService = navigationService;
+            _todoService = todoService;
 
             AddToDoItemCommand = new DelegateCommand(OnAddItem);
             ChangeStateCommand = new DelegateCommand<ToDoItem>(OnChangeState);
@@ -71,12 +73,12 @@ namespace ToDoList.ViewModels
             await _navigationService.NavigateAsync("ToDoItemPage", navParameters);
         }
 
-        private void OnChangeState(ToDoItem item)
+        private async void OnChangeState(ToDoItem item)
         {
             if (item != null)
             {
                 item.IsComplete = !item.IsComplete;
-                //_toDoItemsRepository.SaveItemAsync(item);
+                await _todoService.UpdateTodoItemAsync(ToDoItems.IndexOf(item), item);
             }
         }
 
@@ -85,6 +87,7 @@ namespace ToDoList.ViewModels
             var navParameters = new NavigationParameters();
             navParameters.Add("ToDoItem", SelectedItem);
             navParameters.Add("PageTitle", "Edit item");
+            navParameters.Add("ItemIndex", ToDoItems.IndexOf(SelectedItem));
 
             await _navigationService.NavigateAsync("ToDoItemPage", navParameters);            
         }
@@ -94,43 +97,36 @@ namespace ToDoList.ViewModels
             if (item != null)
             {
                 ToDoItems.Remove(item);
-              //  await _toDoItemsRepository.DeleteItemAsync(item);
+                await _todoService.DeleteTodoItemAsync(ToDoItems.IndexOf(item));
             }
         }
 
         private async void OnListViewRefreshing()
         {
-            ToDoItems = new ObservableCollection<ToDoItem>();//await _toDoItemsRepository.GetAllAsync());
+            ToDoItems = new ObservableCollection<ToDoItem>(await _todoService.GetTodoItemsAsync());
             IsListViewRefreshing = false;
-        }
-
-        private async void OnGoinngToAppSettings()
-        {
-            var navParameters = new NavigationParameters();
-            navParameters.Add("PageTitle", "Settings");
-
-            await _navigationService.NavigateAsync("AppSettingsPage", navParameters);
         }
     
 
         public async void OnNavigatingTo(NavigationParameters parameters)
         {
-            ToDoItems = new ObservableCollection<ToDoItem>();//await _toDoItemsRepository.GetAllAsync());
+            ToDoItems = new ObservableCollection<ToDoItem>(await _todoService.GetTodoItemsAsync());
         }
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-            throw new NotImplementedException();
+           
         }
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
-            throw new NotImplementedException();
+           
         }
         #endregion
 
         #region Fields        
         private readonly INavigationService _navigationService;
+        private readonly ITodoService _todoService;
         private ObservableCollection<ToDoItem> _toDoItems;
         private bool _isListViewRefreshing;
         private ToDoItem _selectedItem;
