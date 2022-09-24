@@ -4,6 +4,7 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"             
              xmlns:vm="clr-namespace:ToDoList.ViewModels" 
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:resource="clr-namespace:ToDoList.Resx"
              x:Class="ToDoList.Views.ToDoItemListPage"             
              x:Name="ItemListPage"
              Title="To do list"> 
@@ -65,6 +66,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        <Button Text="Add To do" BackgroundColor="#00FF00" Command="{Binding AddToDoItemCommand}"/>
+        <Button Text="{x:Static resource:AppResource.Add}" BackgroundColor="#00FF00" Command="{Binding AddToDoItemCommand}"/>
     </StackLayout>
 </ContentPage>

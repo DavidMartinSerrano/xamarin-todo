@@ -15,3 +15,8 @@ C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstand
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstandard2.0\ToDoList.pdb
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\XamlC.stamp
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ref\ToDoList.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.Resx.AppResource.es.resources
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.csproj.GenerateResource.cache
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstandard2.0\es\ToDoList.resources.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\es\ToDoList.resources.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.Resx.AppResource.resources

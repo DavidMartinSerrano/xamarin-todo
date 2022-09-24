@@ -21,6 +21,11 @@
         },
         "runtime": {
           "ToDoList.dll": {}
+        },
+        "resources": {
+          "es/ToDoList.resources.dll": {
+            "locale": "es"
+          }
         }
       },
       "CommonServiceLocator/2.0.6": {

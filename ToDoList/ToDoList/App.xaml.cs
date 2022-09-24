@@ -6,6 +6,9 @@ using Xamarin.Forms;
 using Prism.Ioc;
 using ToDoList.Views;
 using ToDoList.Services;
+using System.Globalization;
+using System.Threading;
+using ToDoList.Resx;
 
 namespace ToDoList
 {
@@ -15,7 +18,10 @@ namespace ToDoList
 
         protected override void OnInitialized()
         {
-            InitializeComponent();        
+            InitializeComponent();
+            //CultureInfo language = new CultureInfo("es");
+            //Thread.CurrentThread.CurrentUICulture = language;
+            //AppResource.Culture = language;
 
             NavigationService.NavigateAsync("MainNavigationPage/ToDoItemListPage");
         }
