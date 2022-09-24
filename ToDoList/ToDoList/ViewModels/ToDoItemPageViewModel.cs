@@ -1,14 +1,10 @@
 ﻿using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using ToDoList.Models;
 using ToDoList.Services;
-using Xamarin.Forms;
 
 namespace ToDoList.ViewModels
 {
@@ -16,14 +12,14 @@ namespace ToDoList.ViewModels
     {
         #region Properties
         public ICommand SaveItemCommand { get; set; }
-        public ICommand GoBackCommand { get; set; }   
+        public ICommand GoBackCommand { get; set; }
 
         public string PageTitle
         {
             get { return _pageTitle; }
             set { SetProperty(ref _pageTitle, value); }
         }
-              
+
 
         public string Name
         {
@@ -31,7 +27,7 @@ namespace ToDoList.ViewModels
             set { SetProperty(ref _name, value); }
         }
 
-     
+
         public bool IsComplete
         {
             get { return _isComplete; }
@@ -46,7 +42,7 @@ namespace ToDoList.ViewModels
             _todoService = todoService;
 
             SaveItemCommand = new DelegateCommand(OnSaveItem);
-            GoBackCommand = new DelegateCommand(OnGoBack);           
+            GoBackCommand = new DelegateCommand(OnGoBack);
         }
         #endregion
 
@@ -58,20 +54,10 @@ namespace ToDoList.ViewModels
                 Name = _name,
                 IsComplete = _isComplete
             };
-      
-            if(PageTitle.Equals("Edit item"))
-            {
-                toDoItem.Key = _itemKey;
-                await _todoService.UpdateTodoItemAsync(_itemKey, toDoItem);           
-            }
-            else
-            {
-                await _todoService.AddTodoItemAsync(toDoItem);
-            
-            }
-
+          
+            await _todoService.AddTodoItemAsync(toDoItem);
             EventSystem.Current.GetEvent<TodoEvent>().Publish(
-              new TodoMessage {});
+              new TodoMessage { });
 
             await _navigationService.GoBackAsync();
         }
@@ -79,7 +65,7 @@ namespace ToDoList.ViewModels
         private async void OnGoBack()
         {
             await _navigationService.GoBackAsync();
-        }             
+        }
 
 
         public void OnNavigatedFrom(INavigationParameters parameters)
@@ -89,13 +75,9 @@ namespace ToDoList.ViewModels
         public void OnNavigatedTo(INavigationParameters parameters)
         {
             var item = parameters.GetValue<ToDoItem>("ToDoItem");
-            if(item != null) IsComplete = item.IsComplete;
+            if (item != null) IsComplete = item.IsComplete;
 
             PageTitle = parameters.GetValue<string>("PageTitle");
-
-            var key = parameters.GetValue<string>("ItemKey");
-            if (!string.IsNullOrWhiteSpace(key)) _itemKey = key;
-                            
         }
         #endregion
 
@@ -103,7 +85,6 @@ namespace ToDoList.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ITodoService _todoService;
         private string _pageTitle = String.Empty;
-        private string _itemKey = String.Empty;
         private string _name = String.Empty;
         private bool _isComplete;
         #endregion
