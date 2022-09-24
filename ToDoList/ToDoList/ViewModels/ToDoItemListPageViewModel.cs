@@ -18,21 +18,20 @@ namespace ToDoList.ViewModels
     {
         #region Properties
         public ICommand AddToDoItemCommand { get; set; }
-        public ICommand ChangeStateCommand { get; set; }
-        public ICommand EditItemCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand RefreshListViewCommand { get; set; }
         public ToDoItem SelectedItem
         {
             get { return _selectedItem; }
             set
-            {                
+            {
                 SetProperty(ref _selectedItem, value);
 
                 if (_selectedItem == null)
                     return;
 
-                OnEditItem();
+                //With more time, investigate onTapGestureRecognizer, etc...
+                OnChangeState();
 
                 SelectedItem = null;
             }
@@ -57,12 +56,9 @@ namespace ToDoList.ViewModels
         public ToDoItemListPageViewModel(INavigationService navigationService, ITodoService todoService)
         {
             _navigationService = navigationService;
-            _todoService = todoService;
-            
+            _todoService = todoService;            
           
             AddToDoItemCommand = new DelegateCommand(OnAddItem);
-            ChangeStateCommand = new DelegateCommand<ToDoItem>(OnChangeState);
-            EditItemCommand = new DelegateCommand(OnEditItem);
             DeleteCommand = new DelegateCommand<ToDoItem>(OnDeleteItem);
             RefreshListViewCommand = new DelegateCommand(OnListViewRefreshing);
             EventSystem.Current.GetEvent<TodoEvent>().Subscribe((message) => _updateTodos = true);
@@ -82,23 +78,13 @@ namespace ToDoList.ViewModels
             await _navigationService.NavigateAsync("ToDoItemPage", navParameters);
         }
 
-        private async void OnChangeState(ToDoItem item)
+        private async void OnChangeState()
         {
-            if (item != null)
+            if (SelectedItem != null)
             {
-                item.IsComplete = !item.IsComplete;
-                await _todoService.UpdateTodoItemAsync(item.Key, item);
+                SelectedItem.IsComplete = !SelectedItem.IsComplete;
+                await _todoService.UpdateTodoItemAsync(SelectedItem.Key, SelectedItem);
             }
-        }
-
-        private async void OnEditItem()
-        {
-            var navParameters = new NavigationParameters();
-            navParameters.Add("ToDoItem", SelectedItem);
-            navParameters.Add("PageTitle", "Edit item");
-            navParameters.Add("ItemKey", SelectedItem.Key);
-
-            await _navigationService.NavigateAsync("ToDoItemPage", navParameters);            
         }
 
         private async void OnDeleteItem(ToDoItem item)
@@ -107,6 +93,7 @@ namespace ToDoList.ViewModels
             {
                 ToDoItems.Remove(item);
                 await _todoService.DeleteTodoItemAsync(item.Key);
+                await Application.Current.MainPage.DisplayAlert("Hey!", $"ToDo item {item.Name} has been deleted\r\ncorrectly”", "Ok");
             }
         }
 

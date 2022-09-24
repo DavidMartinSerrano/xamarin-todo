@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"             
+             xmlns:vm="clr-namespace:ToDoList.ViewModels" 
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="ToDoList.Views.ToDoItemListPage"
+             x:Class="ToDoList.Views.ToDoItemListPage"             
              x:Name="ItemListPage"
              Title="To do list"> 
         <StackLayout 
@@ -21,8 +22,8 @@
                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell Tapped="ViewCell_Tapped">
-                            <StackLayout                         
+                    <ViewCell>
+                        <StackLayout                         
                                 Orientation="Horizontal" 
                                 HorizontalOptions="FillAndExpand">
                                 <Image
@@ -38,8 +39,8 @@
                                     FontAttributes="Italic"
                                     FontSize="Medium"                               
                                     VerticalTextAlignment="Center"
-                                    HorizontalOptions="StartAndExpand">
-                                </Label>
+                                    HorizontalOptions="StartAndExpand"> 
+                            </Label>
 
                                 <Image 
                                     Source="checked.png"                             
@@ -47,23 +48,19 @@
                                     IsVisible="{Binding IsComplete}"
                                     WidthRequest="27"
                                     HeightRequest="27">
-                                </Image>
-                            </StackLayout>
+                                </Image>                           
 
-                            <ViewCell.ContextActions>
-                                <MenuItem 
-                                    Icon="checked.png" 
-                                    Command=
-                                        "{Binding BindingContext.ChangeStateCommand, Source= {x:Reference ItemListPage}}" 
-                                    CommandParameter="{Binding .}"> 
-                                </MenuItem>
+                        </StackLayout>                            
+                        
+                            <ViewCell.ContextActions>                     
                                 <MenuItem 
                                     Icon="Trash"
                                     Command=
                                         "{Binding BindingContext.DeleteCommand, Source={x:Reference ItemListPage}}" 
                                     CommandParameter="{Binding .}">
                                 </MenuItem>
-                            </ViewCell.ContextActions>
+                            </ViewCell.ContextActions>                           
+                         
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

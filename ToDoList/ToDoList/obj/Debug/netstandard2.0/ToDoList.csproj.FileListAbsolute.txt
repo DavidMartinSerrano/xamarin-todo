@@ -7,11 +7,11 @@ C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstand
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.AssemblyInfoInputs.cache
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.AssemblyInfo.cs
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.csproj.CoreCompileInputs.cache
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\refint\ToDoList.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.pdb
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstandard2.0\ToDoList.deps.json
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstandard2.0\ToDoList.dll
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\bin\Debug\netstandard2.0\ToDoList.pdb
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\XamlC.stamp
-C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.dll
-C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\refint\ToDoList.dll
-C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ToDoList.pdb
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList\obj\Debug\netstandard2.0\ref\ToDoList.dll
