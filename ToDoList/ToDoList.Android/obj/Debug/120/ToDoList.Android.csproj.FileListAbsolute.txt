@@ -645,3 +645,11 @@ C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\stamp\_ResolveLibraryProjectImports.stamp
 C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\android\assets\Newtonsoft.Json.dll
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\blackplus.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\check.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\checked.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\edit.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\editing.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\icon.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\plus.png
+C:\Users\david.martin\source\repos\ToDoList\ToDoList\ToDoList.Android\obj\Debug\120\res\drawable\trash.png
