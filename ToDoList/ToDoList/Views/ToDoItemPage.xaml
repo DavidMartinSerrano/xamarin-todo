@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Name="toDoItemPage"  
+             x:Class="ToDoList.Views.ToDoItemPage"
+             Title="{Binding PageTitle}">
+
+    <StackLayout Orientation="Vertical" VerticalOptions="Center">
+    <Entry Placeholder="Todo Title" Text="{Binding Name}" />
+    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" >
+        <Button Text="Back"  BackgroundColor="#ffd27f" Command="{Binding GoBackCommand}" />
+        <Button Text="Save"  BackgroundColor="#00FF00" Command="{Binding SaveItemCommand}" />
+        <Button Text="Save"  BackgroundColor="#ff7f7f" Command="{Binding DeleteItemCommand}" />
+    </StackLayout>
+    </StackLayout>
+
+</ContentPage>
