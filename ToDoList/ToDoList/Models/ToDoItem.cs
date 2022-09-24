@@ -20,6 +20,16 @@ namespace ToDoList.Models
             set { SetProperty(ref _isComplete, value); }
         }
 
+
+
+        public string Key
+        {
+            get { return _key; }
+            set { SetProperty(ref _key, value); }
+        }
+
+
+
         public ToDoItem()
         {
 
@@ -27,5 +37,6 @@ namespace ToDoList.Models
 
         private bool _isComplete;
         private string _name;
+        private string _key;
     }
 }

@@ -33,7 +33,7 @@
                                 </Image>
 
                                 <Label 
-                                    Text="{Binding Title}" 
+                                    Text="{Binding Name}" 
                                     Font="Palatino"
                                     FontAttributes="Italic"
                                     FontSize="Medium"                               
@@ -44,7 +44,7 @@
                                 <Image 
                                     Source="checked.png"                             
                                     HorizontalOptions="End" 
-                                    IsVisible="{Binding Done}"
+                                    IsVisible="{Binding IsComplete}"
                                     WidthRequest="27"
                                     HeightRequest="27">
                                 </Image>
@@ -68,5 +68,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackLayout>
+        <Button Text="Add To do" BackgroundColor="#00FF00" Command="{Binding AddToDoItemCommand}"/>
+    </StackLayout>
 </ContentPage>

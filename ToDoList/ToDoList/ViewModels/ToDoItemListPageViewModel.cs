@@ -1,10 +1,12 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ToDoList.Models;
 using ToDoList.Services;
@@ -20,7 +22,6 @@ namespace ToDoList.ViewModels
         public ICommand EditItemCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand RefreshListViewCommand { get; set; }
-
         public ToDoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -37,6 +38,7 @@ namespace ToDoList.ViewModels
             }
         }
 
+
         public ObservableCollection<ToDoItem> ToDoItems
         {
             get { return _toDoItems; }
@@ -48,6 +50,7 @@ namespace ToDoList.ViewModels
             get { return _isListViewRefreshing; }
             set { SetProperty(ref _isListViewRefreshing, value); }
         }
+        
         #endregion
 
         #region Constructor        
@@ -55,18 +58,24 @@ namespace ToDoList.ViewModels
         {
             _navigationService = navigationService;
             _todoService = todoService;
-
+            
+          
             AddToDoItemCommand = new DelegateCommand(OnAddItem);
             ChangeStateCommand = new DelegateCommand<ToDoItem>(OnChangeState);
             EditItemCommand = new DelegateCommand(OnEditItem);
             DeleteCommand = new DelegateCommand<ToDoItem>(OnDeleteItem);
             RefreshListViewCommand = new DelegateCommand(OnListViewRefreshing);
+            EventSystem.Current.GetEvent<TodoEvent>().Subscribe((message) => _updateTodos = true);
+
+            Task.Run(async () => ToDoItems = new ObservableCollection<ToDoItem>(await _todoService.GetTodoItemsAsync()));
         }
+    
         #endregion
 
         #region Methods        
         private async void OnAddItem()
         {
+
             var navParameters = new NavigationParameters();
             navParameters.Add("PageTitle", "Create new item");
 
@@ -78,7 +87,7 @@ namespace ToDoList.ViewModels
             if (item != null)
             {
                 item.IsComplete = !item.IsComplete;
-                await _todoService.UpdateTodoItemAsync(ToDoItems.IndexOf(item), item);
+                await _todoService.UpdateTodoItemAsync(item.Key, item);
             }
         }
 
@@ -87,7 +96,7 @@ namespace ToDoList.ViewModels
             var navParameters = new NavigationParameters();
             navParameters.Add("ToDoItem", SelectedItem);
             navParameters.Add("PageTitle", "Edit item");
-            navParameters.Add("ItemIndex", ToDoItems.IndexOf(SelectedItem));
+            navParameters.Add("ItemKey", SelectedItem.Key);
 
             await _navigationService.NavigateAsync("ToDoItemPage", navParameters);            
         }
@@ -97,7 +106,7 @@ namespace ToDoList.ViewModels
             if (item != null)
             {
                 ToDoItems.Remove(item);
-                await _todoService.DeleteTodoItemAsync(ToDoItems.IndexOf(item));
+                await _todoService.DeleteTodoItemAsync(item.Key);
             }
         }
 
@@ -108,19 +117,18 @@ namespace ToDoList.ViewModels
         }
     
 
-        public async void OnNavigatingTo(NavigationParameters parameters)
-        {
-            ToDoItems = new ObservableCollection<ToDoItem>(await _todoService.GetTodoItemsAsync());
-        }
-
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
            
         }
 
-        public void OnNavigatedTo(INavigationParameters parameters)
+        public async void OnNavigatedTo(INavigationParameters parameters)
         {
-           
+            if (_updateTodos)
+            {
+                ToDoItems = new ObservableCollection<ToDoItem>(await _todoService.GetTodoItemsAsync());
+            }
+            _updateTodos = false;
         }
         #endregion
 
@@ -130,6 +138,7 @@ namespace ToDoList.ViewModels
         private ObservableCollection<ToDoItem> _toDoItems;
         private bool _isListViewRefreshing;
         private ToDoItem _selectedItem;
+        private bool _updateTodos;
         #endregion
     }
 }

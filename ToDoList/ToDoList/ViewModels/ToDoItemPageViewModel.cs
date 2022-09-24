@@ -1,7 +1,9 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ToDoList.Models;
@@ -59,13 +61,17 @@ namespace ToDoList.ViewModels
       
             if(PageTitle.Equals("Edit item"))
             {
-                await _todoService.UpdateTodoItemAsync(_itemIndex, toDoItem);
+                toDoItem.Key = _itemKey;
+                await _todoService.UpdateTodoItemAsync(_itemKey, toDoItem);           
             }
             else
             {
                 await _todoService.AddTodoItemAsync(toDoItem);
-
+            
             }
+
+            EventSystem.Current.GetEvent<TodoEvent>().Publish(
+              new TodoMessage {});
 
             await _navigationService.GoBackAsync();
         }
@@ -75,24 +81,6 @@ namespace ToDoList.ViewModels
             await _navigationService.GoBackAsync();
         }             
 
-        public void OnNavigatingTo(INavigationParameters parameters)
-        {
-            if (parameters.ContainsKey("ToDoItem"))
-            {
-                var item = (ToDoItem)parameters["ToDoItem"];
-
-                Name = item.Name;
-                IsComplete = item.IsComplete;
-            }
-            if (parameters.ContainsKey("PageTitle"))
-            {
-                PageTitle = (string)parameters["PageTitle"];
-            }
-            if (parameters.ContainsKey("ItemIndex"))
-            {
-                _itemIndex = Convert.ToInt32((string)parameters["ItemIndex"]);
-            }
-        }
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
@@ -100,15 +88,23 @@ namespace ToDoList.ViewModels
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
+            var item = parameters.GetValue<ToDoItem>("ToDoItem");
+            if(item != null) IsComplete = item.IsComplete;
+
+            PageTitle = parameters.GetValue<string>("PageTitle");
+
+            var key = parameters.GetValue<string>("ItemKey");
+            if (!string.IsNullOrWhiteSpace(key)) _itemKey = key;
+                            
         }
         #endregion
 
         #region Fields        
         private readonly INavigationService _navigationService;
         private readonly ITodoService _todoService;
-        private string _pageTitle;
-        private int _itemIndex = 0;
-        private string _name;
+        private string _pageTitle = String.Empty;
+        private string _itemKey = String.Empty;
+        private string _name = String.Empty;
         private bool _isComplete;
         #endregion
     }

@@ -11,6 +11,7 @@ namespace ToDoList.Services
     public class TodoService : ITodoService
     {
         HttpClient client = new HttpClient();
+        private const string localIpAddressAndPort = "http://10.0.2.2:8080";
         public TodoService()
         {
         }
@@ -21,7 +22,7 @@ namespace ToDoList.Services
         /// <returns>The todo items async.</returns>
         public async Task<List<ToDoItem>> GetTodoItemsAsync()
         {
-            var response = await client.GetStringAsync("http://localhost:8080/api/todo/items");
+            var response = await client.GetStringAsync($"{localIpAddressAndPort}/api/todo");
             var todoItems = JsonConvert.DeserializeObject<List<ToDoItem>>(response);
             return todoItems;
         }
@@ -31,37 +32,35 @@ namespace ToDoList.Services
         /// </summary>
         /// <returns>The todo item async.</returns>
         /// <param name="itemToAdd">Item to add.</param>
-        public async Task<int> AddTodoItemAsync(ToDoItem itemToAdd)
+        public async Task AddTodoItemAsync(ToDoItem itemToAdd)
         {
             var data = JsonConvert.SerializeObject(itemToAdd);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("http://localhost:8080/api/todo/item", content);
-            var result = JsonConvert.DeserializeObject<int>(response.Content.ReadAsStringAsync().Result);
-            return result;
+            await client.PostAsync($"{localIpAddressAndPort}/api/todo/create", content);            
         }
 
         /// <summary>
         /// Updates the todo item async.
         /// </summary>
         /// <returns>The todo item async.</returns>
-        /// <param name="itemIndex">Item index.</param>
+        /// <param name="itemkey">Item key.</param>
         /// <param name="itemToUpdate">Item to update.</param>
-        public async Task<int> UpdateTodoItemAsync(int itemIndex, ToDoItem itemToUpdate)
+        public async Task UpdateTodoItemAsync(string itemkey, ToDoItem itemToUpdate)
         {
             var data = JsonConvert.SerializeObject(itemToUpdate);
             var content = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync(string.Concat("http://localhost:8080/api/todo/", itemIndex), content);
-            return JsonConvert.DeserializeObject<int>(response.Content.ReadAsStringAsync().Result);
+            var url = $"{localIpAddressAndPort}/api/todo/{itemkey}";
+            await client.PutAsync(url, content);           
         }
 
         /// <summary>
         /// Deletes the todo item async.
         /// </summary>
         /// <returns>The todo item async.</returns>
-        /// <param name="itemIndex">Item index.</param>
-        public async Task DeleteTodoItemAsync(int itemIndex)
+        /// <param name="itemkey">Item key.</param>
+        public async Task DeleteTodoItemAsync(string itemkey)
         {
-            await client.DeleteAsync(string.Concat("http://localhost:8080/api/todo/", itemIndex));
+            await client.DeleteAsync($"{localIpAddressAndPort}/api/todo/{itemkey}");
         }
     }
 }
